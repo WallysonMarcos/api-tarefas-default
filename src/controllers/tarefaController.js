@@ -39,15 +39,16 @@ exports.listarPorID = (req, res ) =>{
 
 exports.inserir = (req, res) =>{
   
-  const tarefa = {}
+  const tarefas = []
+  tarefas.push(req.body.descricao)
+  tarefas.push(req.body.data)
+  tarefas.push(req.body.realizado)
+  tarefas.push(req.body.categoria_id)
 
-  tarefa.descricao = req.body.descricao
-  tarefa.data = req.body.data
-  tarefa.realizado = req.body.realizado
-  tarefa.categoria_id = req.body.categoria_id
-
+  console.log(tarefas)
+  /*
   const query = "insert into tarefas (descricao, data, realizado, categoria_id) values( ?, ?, ?, ?)"
-  conexao.query(query,[tarefa.descricao, tarefa.data, tarefa.realizado, tarefa.categoria_id], (error,rows) =>{
+  conexao.query(query,tarefas, (error,rows) =>{
     if(error){
       res.status(500)
       res.json({"mensage": "Internal Server Error"})
@@ -55,6 +56,32 @@ exports.inserir = (req, res) =>{
     }else{
       res.status(201)
       res.json({"mensage": "Tarefa criada com sucesso", "id": rows.insetID})
+    }
+  })*/
+}
+
+
+exports.alterar = (req, res) =>{
+  const tarefas = []
+  tarefas.push(req.body.descricao)
+  tarefas.push(req.body.data)
+  tarefas.push(req.body.realizado)
+  tarefas.push(req.body.categoria_id)
+  tarefas.push(req.params.id)
+
+  const query = "UPDATE tarefas SET descricao = ?, data = ?, realizado = ?, categoria_id = ? WHERE id = ?"
+
+  conexao.query(query,tarefas,(error,rows) =>{
+    if(error){
+      res.status(500)
+      res.json({"mensage": "Internal Server Error"})
+      console.log(error)
+    }else if(rows.affectedRows > 0){
+      res.status(200)
+      res.json({"mensage": "Nenhuma tarefa encontrada"})
+    }else{
+      res.status(404)
+      res.json({"mensage": "Nenhuma tarefa encontrada"})
     }
   })
 }
